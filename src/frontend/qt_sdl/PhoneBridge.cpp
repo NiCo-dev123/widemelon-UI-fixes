@@ -265,6 +265,7 @@ PhoneBridgeSettings PhoneBridgeManager::loadSettings()
     value.synchronousCapture = cfg.GetBool("WideMelon.Phone.SynchronousCapture");
     value.reuseLastPairingCode = cfg.GetBool("WideMelon.Phone.ReuseLastPairingCode");
     value.lastPairingCode = QString::fromStdString(cfg.GetString("WideMelon.Phone.LastPairingCode"));
+    value.shortPairingCode = cfg.GetBool("WideMelon.Phone.ShortPairingCode");
     value.layoutJson = PhoneControllerLayout::fromJson(
         QString::fromStdString(cfg.GetString("WideMelon.Phone.Layout"))).toJson();
 
@@ -299,6 +300,7 @@ void PhoneBridgeManager::saveSettings(const PhoneBridgeSettings& value)
     cfg.SetBool("WideMelon.Phone.SynchronousCapture", value.synchronousCapture);
     cfg.SetBool("WideMelon.Phone.ReuseLastPairingCode", value.reuseLastPairingCode);
     cfg.SetString("WideMelon.Phone.LastPairingCode", value.lastPairingCode.toStdString());
+    cfg.SetBool("WideMelon.Phone.ShortPairingCode", value.shortPairingCode);
     cfg.SetString("WideMelon.Phone.Layout", value.layoutJson.toStdString());
     Config::Save();
 }
@@ -865,7 +867,8 @@ void PhoneBridgeManager::recordAuthenticationFailure(const QHostAddress& peer, q
 void PhoneBridgeManager::generatePairingCredentials(bool reuseLastCode)
 {
     clearPairingCredentials();
-    pairingCredentials.regenerate(reuseLastCode ? currentSettings.lastPairingCode : QString());
+    pairingCredentials.regenerate(currentSettings.shortPairingCode,
+                                  reuseLastCode ? currentSettings.lastPairingCode : QString());
     if (currentSettings.lastPairingCode != pairingCredentials.code())
     {
         currentSettings.lastPairingCode = pairingCredentials.code();

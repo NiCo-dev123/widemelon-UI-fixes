@@ -257,7 +257,7 @@ PhoneScreenDialog::PhoneScreenDialog(PhoneBridgeManager* manager, QWidget* paren
 
     auto root = new QVBoxLayout(this);
     root->setContentsMargins(12, 12, 12, 12);
-    root->setSpacing(8);
+    root->setSpacing(4);
 
     warning = new QLabel("Use only on a private home network you trust. Pairing prevents other devices from connecting, but the connection is not encrypted.");
     warning->setWordWrap(true);
@@ -267,6 +267,7 @@ PhoneScreenDialog::PhoneScreenDialog(PhoneBridgeManager* manager, QWidget* paren
     auto sessionBox = new QGroupBox("Session");
     auto sessionLayout = new QGridLayout(sessionBox);
     auto sessionDetails = new QFormLayout;
+    sessionDetails->setVerticalSpacing(2);
     status = new QLabel;
     address = new QLabel;
     address->setWordWrap(true);
